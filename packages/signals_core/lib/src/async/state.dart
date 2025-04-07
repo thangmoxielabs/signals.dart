@@ -325,6 +325,40 @@ sealed class AsyncState<T> {
   int get hashCode;
 }
 
+/// An initial state with nothing
+class AsyncInitial<T> extends AsyncState<T> {
+  /// Create an initial state with nothing
+  const AsyncInitial();
+
+  @override
+  bool get hasValue => false;
+
+  @override
+  bool get hasError => false;
+
+  @override
+  T? get value => null;
+
+  @override
+  bool get isLoading => false;
+
+  @override
+  bool get isRefreshing => false;
+
+  @override
+  bool get isReloading => false;
+
+  @override
+  Object? get error => null;
+
+  @override
+  StackTrace? get stackTrace => null;
+
+  @override
+  T get requireValue =>
+      throw UnsupportedError('Initial state does not have a value');
+}
+
 /// A loading state with a value. Signals the query conditions that led to the data
 /// has changed and is being reloaded.
 class AsyncDataReloading<T> extends AsyncData<T> implements AsyncLoading<T> {

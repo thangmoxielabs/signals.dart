@@ -233,6 +233,7 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   /// Reload the future
   Future<void> reload() async {
     value = switch (value) {
+      AsyncInitial<T> _ => AsyncInitial<T>(),
       AsyncData<T> data => AsyncDataReloading<T>(data.value),
       AsyncError<T> err => AsyncErrorReloading<T>(err.error, err.stackTrace),
       AsyncLoading<T>() => AsyncLoading<T>(),
@@ -242,6 +243,7 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   /// Refresh the future
   Future<void> refresh() async {
     value = switch (value) {
+      AsyncInitial<T> _ => AsyncInitial<T>(),
       AsyncData<T> data => AsyncDataRefreshing<T>(data.value),
       AsyncError<T> err => AsyncErrorRefreshing<T>(err.error, err.stackTrace),
       AsyncLoading<T>() => AsyncLoading<T>(),

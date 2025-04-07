@@ -177,6 +177,11 @@ typedef AsyncStateBuilder<E> = E Function();
 sealed class AsyncState<T> {
   const AsyncState();
 
+  /// Create an initial state with nothing
+  factory AsyncState.initial() {
+    return AsyncInitial<T>();
+  }
+
   /// Create a state with a value that is reloading
   factory AsyncState.dataReloading(T data) {
     return AsyncDataReloading<T>(data);

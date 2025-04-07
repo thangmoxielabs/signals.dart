@@ -152,17 +152,19 @@ void main() {
         expect(value, true);
       });
     });
-    
+
     group('pattern matching', () {
       test('loading', () {
         final s = AsyncState<int>.loading();
         int value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncData<int>() => 1,
           AsyncError<int>() => 2,
           AsyncLoading<int>() => 3,
         };
         expect(value, 3);
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncDataRefreshing<int>() => 1,
           AsyncDataReloading<int>() => 2,
           AsyncData<int>() => 3,
@@ -177,12 +179,14 @@ void main() {
       test('data', () {
         var s = AsyncState<int>.data(0);
         int value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncData<int>() => 1,
           AsyncError<int>() => 2,
           AsyncLoading<int>() => 3,
         };
         expect(value, 1);
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncDataRefreshing<int>() => 1,
           AsyncDataReloading<int>() => 2,
           AsyncData<int>() => 3,
@@ -194,12 +198,14 @@ void main() {
         expect(value, 3);
         s = AsyncState<int>.dataRefreshing(0);
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncData<int>() => 1,
           AsyncError<int>() => 2,
           AsyncLoading<int>() => 3,
         };
         expect(value, 1);
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncDataRefreshing<int>() => 1,
           AsyncDataReloading<int>() => 2,
           AsyncData<int>() => 3,
@@ -211,12 +217,14 @@ void main() {
         expect(value, 1);
         s = AsyncState<int>.dataReloading(0);
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncData<int>() => 1,
           AsyncError<int>() => 2,
           AsyncLoading<int>() => 3,
         };
         expect(value, 1);
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncDataRefreshing<int>() => 1,
           AsyncDataReloading<int>() => 2,
           AsyncData<int>() => 3,
@@ -230,12 +238,14 @@ void main() {
       test('error', () {
         var s = AsyncState<int>.error('error');
         int value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncData<int>() => 1,
           AsyncError<int>() => 2,
           AsyncLoading<int>() => 3,
         };
         expect(value, 2);
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncDataRefreshing<int>() => 1,
           AsyncDataReloading<int>() => 2,
           AsyncData<int>() => 3,
@@ -247,12 +257,14 @@ void main() {
         expect(value, 6);
         s = AsyncState<int>.errorRefreshing('error');
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncData<int>() => 1,
           AsyncError<int>() => 2,
           AsyncLoading<int>() => 3,
         };
         expect(value, 2);
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncDataRefreshing<int>() => 1,
           AsyncDataReloading<int>() => 2,
           AsyncData<int>() => 3,
@@ -264,12 +276,14 @@ void main() {
         expect(value, 4);
         s = AsyncState<int>.errorReloading('error');
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncData<int>() => 1,
           AsyncError<int>() => 2,
           AsyncLoading<int>() => 3,
         };
         expect(value, 2);
         value = switch (s) {
+          AsyncInitial<int>() => 0,
           AsyncDataRefreshing<int>() => 1,
           AsyncDataReloading<int>() => 2,
           AsyncData<int>() => 3,

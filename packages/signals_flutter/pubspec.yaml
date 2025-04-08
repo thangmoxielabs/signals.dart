@@ -12,7 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals_core: ^6.0.2
+  signals_core: 
+    path: ../signals_core
 
 dev_dependencies:
   flutter_test:

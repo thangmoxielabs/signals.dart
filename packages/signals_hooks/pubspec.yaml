@@ -13,7 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_hooks: ^0.20.0
-  signals_flutter: ^6.0.2
+  signals_flutter: 
+    path: ../signals_flutter
 
 dev_dependencies:
   flutter_test:

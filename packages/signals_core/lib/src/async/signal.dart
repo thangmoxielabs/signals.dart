@@ -201,7 +201,7 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   /// Set the value to [AsyncData]
   void setValue(T value) {
     batch(() {
-      this.value = AsyncState.data(value);
+      this.set(AsyncState.data(value), force: true);
       if (_completer.isCompleted) _completer = Completer<bool>();
       _completer.complete(true);
     });

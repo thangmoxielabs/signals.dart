@@ -1,5 +1,4 @@
-import '../value/value.dart';
-import 'signals.dart';
+import 'package:signals_core/signals_core.dart';
 
 /// Signal container used to create signals based on args
 ///
@@ -58,7 +57,7 @@ import 'signals.dart';
 ///  settings.darkMode.value = 'true';
 ///}
 /// ```
-class SignalContainer<T, Arg, S extends ReadonlySignalMixin<T>> {
+class SignalContainer<T, Arg, S extends ReadonlySignalMixin> {
   /// If true then signals will be cached when created
   final bool cache;
 

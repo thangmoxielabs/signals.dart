@@ -5,7 +5,7 @@ void main() {
   SignalsObserver.instance = null;
   group('AsyncSignal', () {
     test('data', () async {
-      final s = asyncSignal(AsyncState<int>.data(0));
+      final s = asyncSignal(AsyncState(value: 0));
       expect(s.peek().isLoading, false);
       expect(s.peek().hasError, false);
       expect(s.peek().hasValue, true);
@@ -14,14 +14,14 @@ void main() {
     });
 
     test('isCompleted', () async {
-      final s = asyncSignal(AsyncState<int>.data(0));
+      final s = asyncSignal(AsyncState(value: 0));
       expect(s.isCompleted, false);
       s.setValue(1);
       expect(s.isCompleted, true);
     });
 
     test('error', () async {
-      final s = asyncSignal(AsyncState<int>.error('error'));
+      final s = asyncSignal(AsyncState(error: 'error'));
       expect(s.peek().isLoading, false);
       expect(s.peek().hasError, true);
       expect(s.peek().hasValue, false);
@@ -29,14 +29,14 @@ void main() {
     });
 
     test('loading', () async {
-      final s = asyncSignal(AsyncState<int>.loading());
+      final s = asyncSignal(AsyncState(isLoading: true));
       expect(s.peek().isLoading, true);
       expect(s.peek().hasError, false);
       expect(s.peek().hasValue, false);
     });
 
     test('state', () async {
-      final s = asyncSignal(AsyncState<int>.loading());
+      final s = asyncSignal(AsyncState(isLoading: true));
       expect(s().isLoading, true);
       s.setValue(0);
       expect(s().isLoading, false);
@@ -57,7 +57,7 @@ void main() {
 
     group('reload', () {
       test('data', () async {
-        final s = asyncSignal(AsyncState<int>.data(0));
+        final s = asyncSignal(AsyncState(value: 0));
         s.reload();
         expect(s.value is AsyncLoading, true);
         expect(s.value is AsyncData, true);
@@ -68,7 +68,7 @@ void main() {
       });
 
       test('error', () async {
-        final s = asyncSignal(AsyncState<int>.error('error'));
+        final s = asyncSignal(AsyncState(error: 'error'));
         s.reload();
         expect(s.value is AsyncLoading, true);
         expect(s.value is AsyncError, true);
@@ -79,7 +79,7 @@ void main() {
       });
 
       test('loading', () async {
-        final s = asyncSignal(AsyncState<int>.loading());
+        final s = asyncSignal(AsyncState(isLoading: true));
         s.reload();
         expect(s.value is AsyncLoading, true);
         expect(s.value is! AsyncDataReloading, true);
@@ -94,7 +94,7 @@ void main() {
 
     group('refresh', () {
       test('data', () async {
-        final s = asyncSignal(AsyncState<int>.data(0));
+        final s = asyncSignal(AsyncState(value: 0));
         s.refresh();
         expect(s.value is AsyncLoading, true);
         expect(s.value is AsyncData, true);
@@ -105,7 +105,7 @@ void main() {
       });
 
       test('error', () async {
-        final s = asyncSignal(AsyncState<int>.error('error'));
+        final s = asyncSignal(AsyncState(error: 'error'));
         s.refresh();
         expect(s.value is AsyncLoading, true);
         expect(s.value is AsyncError, true);
@@ -116,7 +116,7 @@ void main() {
       });
 
       test('loading', () async {
-        final s = asyncSignal(AsyncState<int>.loading());
+        final s = asyncSignal(AsyncState(isLoading: true));
         s.refresh();
         expect(s.value is AsyncLoading, true);
         expect(s.value is! AsyncDataReloading, true);

@@ -22,7 +22,7 @@ extension SignalStreamUtils<T> on Stream<T> {
   ///
   /// For returning a signal with the value that can be accessed sync use
   /// stream.toSyncSignal instead.
-  StreamSignal<T> toStreamSignal({
+  StreamSignal<T, Object> toStreamSignal({
     bool? cancelOnError,
     String? debugLabel,
     T? initialValue,
@@ -31,7 +31,7 @@ extension SignalStreamUtils<T> on Stream<T> {
     List<ReadonlySignal<dynamic>> dependencies = const [],
     void Function()? onDone,
   }) {
-    return streamSignal<T>(
+    return streamSignal<T, Object>(
       () => this,
       cancelOnError: cancelOnError,
       debugLabel: debugLabel,

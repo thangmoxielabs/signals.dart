@@ -4,7 +4,7 @@ import 'package:signals_core/signals_core.dart';
 typedef TimerSignalEvent = ({int iteration, int millis});
 
 /// Emit recurring [TimerSignalEvent] aka [AsyncSignal]
-class TimerSignal extends StreamSignal<TimerSignalEvent> {
+class TimerSignal extends StreamSignal<TimerSignalEvent, Object> {
   /// Trigger an [TimerSignalEvent] every duration
   final Duration every;
 

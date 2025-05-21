@@ -11,7 +11,7 @@ extension SignalFutureUtils<T> on Future<T> {
   /// final future = Future(() => 1);
   /// final signal = future.toSignal();
   /// ```
-  FutureSignal<T> toFutureSignal({
+  FutureSignal<T, Object> toFutureSignal({
     Duration? timeout,
     String? debugLabel,
     T? initialValue,

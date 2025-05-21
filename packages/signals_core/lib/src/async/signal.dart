@@ -164,15 +164,15 @@ import 'state.dart';
 /// ```
 /// @link https://dartsignals.dev/async/state
 /// {@endtemplate}
-class AsyncSignal<T> extends Signal<AsyncState<T>>
-    with EventSinkSignalMixin<T> {
+class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
+    with EventSinkSignalMixin<T, E> {
   /// A [Signal] that stores value in [AsyncState]
   AsyncSignal(
     super.value, {
     super.debugLabel,
     super.autoDispose,
   }) : _initialValue = value;
-  final AsyncState<T> _initialValue;
+  final AsyncState<T, E> _initialValue;
   bool _initialized = false;
   Completer<bool> _completer = Completer<bool>();
 
@@ -190,9 +190,9 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   }
 
   /// Set the error with optional stackTrace to [AsyncError]
-  void setError(Object error, [StackTrace? stackTrace]) {
+  void setError(E error, [StackTrace? stackTrace]) {
     batch(() {
-      value = AsyncState.error(error, stackTrace);
+      value = value.withError(error, stackTrace);
       if (_completer.isCompleted) _completer = Completer<bool>();
       _completer.complete(true);
     });
@@ -201,24 +201,24 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
   /// Set the value to [AsyncData]
   void setValue(T value) {
     batch(() {
-      this.set(AsyncState.data(value), force: true);
+      set(this.value.withValue(value), force: true);
       if (_completer.isCompleted) _completer = Completer<bool>();
       _completer.complete(true);
     });
   }
 
   /// Set the loading state to [AsyncLoading]
-  void setLoading([AsyncState<T>? state]) {
+  void setLoading() {
     batch(() {
-      value = state ?? AsyncState.loading();
+      value = this.value.withLoading();
       _completer = Completer<bool>();
     });
   }
 
   /// Reset the signal to the initial value
-  void reset([AsyncState<T>? value]) {
+  void reset() {
     batch(() {
-      this.value = value ?? _initialValue;
+      value = _initialValue;
       _initialized = false;
       if (_completer.isCompleted) _completer = Completer<bool>();
     });
@@ -232,26 +232,11 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
 
   /// Reload the future
   Future<void> reload() async {
-    value = switch (value) {
-      AsyncInitial<T> _ => AsyncInitial<T>(),
-      AsyncData<T> data => AsyncDataReloading<T>(data.value),
-      AsyncError<T> err => AsyncErrorReloading<T>(err.error, err.stackTrace),
-      AsyncLoading<T>() => AsyncLoading<T>(),
-    };
-  }
-
-  /// Refresh the future
-  Future<void> refresh() async {
-    value = switch (value) {
-      AsyncInitial<T> _ => AsyncInitial<T>(),
-      AsyncData<T> data => AsyncDataRefreshing<T>(data.value),
-      AsyncError<T> err => AsyncErrorRefreshing<T>(err.error, err.stackTrace),
-      AsyncLoading<T>() => AsyncLoading<T>(),
-    };
+    value = this.value.withReloading();
   }
 
   @override
-  AsyncState<T> get value {
+  AsyncState<T, E> get value {
     init();
     return super.value;
   }
@@ -420,12 +405,12 @@ class AsyncSignal<T> extends Signal<AsyncState<T>>
 /// ```
 /// @link https://dartsignals.dev/async/state
 /// {@endtemplate}
-AsyncSignal<T> asyncSignal<T>(
-  AsyncState<T> value, {
+AsyncSignal<T, E> asyncSignal<T, E>(
+  AsyncState<T, E> value, {
   String? debugLabel,
   bool autoDispose = false,
 }) {
-  return AsyncSignal<T>(
+  return AsyncSignal<T, E>(
     value,
     debugLabel: debugLabel,
     autoDispose: autoDispose,

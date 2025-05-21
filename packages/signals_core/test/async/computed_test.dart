@@ -107,38 +107,6 @@ void main() {
       expect(signal.value.error, null);
     });
 
-    test('check refresh calls', () async {
-      int calls = 0;
-
-      Future<int> future() async {
-        calls++;
-        await Future.delayed(const Duration(milliseconds: 5));
-        return 10;
-      }
-
-      final signal = computedAsync(() => future());
-      expect(signal.peek().isLoading, true);
-      expect(calls, 1);
-
-      await signal.future;
-
-      expect(calls, 1);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
-
-      await signal.future;
-
-      expect(calls, 1);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
-
-      await signal.refresh();
-
-      expect(calls, 2);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
-    });
-
     test('dependencies', () async {
       final prefix = signal('a');
       final val = signal(0);

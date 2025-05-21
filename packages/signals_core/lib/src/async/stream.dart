@@ -27,7 +27,7 @@ import 'state.dart';
 ///
 /// ## .value, .peek()
 ///
-/// Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
+/// Returns [`AsyncState<T, E>`](/dart/async/state) for the value and can handle the various states.
 ///
 /// The `value` getter returns the value of the stream if it completed successfully.
 ///
@@ -112,7 +112,7 @@ import 'state.dart';
 /// ```
 /// @link https://dartsignals.dev/async/stream
 /// {@endtemplate}
-class StreamSignal<T> extends AsyncSignal<T> {
+class StreamSignal<T, E> extends AsyncSignal<T, E> {
   late final Computed<Stream<T>> _stream;
   bool _fetching = false;
   StreamSubscription<T>? _subscription;
@@ -158,7 +158,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
   ///
   /// ## .value, .peek()
   ///
-  /// Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
+  /// Returns [`AsyncState<T, E>`](/dart/async/state) for the value and can handle the various states.
   ///
   /// The `value` getter returns the value of the stream if it completed successfully.
   ///
@@ -261,9 +261,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
             return fn();
           },
         ),
-        super(initialValue != null
-            ? AsyncState.data(initialValue)
-            : AsyncState.loading()) {
+        super(AsyncState(value: initialValue)) {
     if (!lazy) value;
   }
 
@@ -318,19 +316,8 @@ class StreamSignal<T> extends AsyncSignal<T> {
   }
 
   @override
-  Future<void> refresh() async {
-    super.refresh();
-    _stream.recompute();
-    _fetching = false;
-    _done = false;
-    _subscription?.cancel();
-    _subscription = null;
-    await execute(_stream.value);
-  }
-
-  @override
-  void reset([AsyncState<T>? value]) {
-    super.reset(value);
+  void reset() {
+    super.reset();
     _fetching = false;
     _done = false;
     _subscription?.cancel();
@@ -346,7 +333,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
   }
 
   @override
-  AsyncState<T> get value {
+  AsyncState<T, E> get value {
     _cleanup ??= _stream.subscribe((src) {
       reset();
       execute(src);
@@ -355,7 +342,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
   }
 
   @override
-  void setError(Object error, [StackTrace? stackTrace]) {
+  void setError(E error, [StackTrace? stackTrace]) {
     super.setError(error, stackTrace);
     if (cancelOnError == true) {
       _finish();
@@ -386,7 +373,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
 ///
 /// ## .value, .peek()
 ///
-/// Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
+/// Returns [`AsyncState<T, E>`](/dart/async/state) for the value and can handle the various states.
 ///
 /// The `value` getter returns the value of the stream if it completed successfully.
 ///
@@ -471,7 +458,7 @@ class StreamSignal<T> extends AsyncSignal<T> {
 /// ```
 /// @link https://dartsignals.dev/async/stream
 /// {@endtemplate}
-StreamSignal<T> streamSignal<T>(
+StreamSignal<T, E> streamSignal<T, E>(
   Stream<T> Function() callback, {
   T? initialValue,
   String? debugLabel,
@@ -481,7 +468,7 @@ StreamSignal<T> streamSignal<T>(
   bool lazy = true,
   bool autoDispose = false,
 }) {
-  return StreamSignal(
+  return StreamSignal<T, E>(
     callback,
     initialValue: initialValue,
     debugLabel: debugLabel,

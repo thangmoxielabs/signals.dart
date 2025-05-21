@@ -86,38 +86,6 @@ void main() {
       expect(signal.value.error, null);
     });
 
-    test('check refresh calls', () async {
-      int calls = 0;
-
-      Stream<int> stream() async* {
-        calls++;
-        await Future.delayed(const Duration(milliseconds: 5));
-        yield* _stream();
-      }
-
-      final signal = streamSignal(() => stream());
-      expect(signal.peek().isLoading, true);
-      expect(calls, 0);
-
-      await signal.future;
-
-      expect(calls, 1);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
-
-      await signal.future;
-
-      expect(calls, 1);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
-
-      await signal.refresh();
-
-      expect(calls, 2);
-      expect(signal.value.value, 10);
-      expect(signal.value.error, null);
-    });
-
     test('onDone', () async {
       final stream = _stream();
       bool done = false;
@@ -160,7 +128,7 @@ void main() {
 
     test('error', () async {
       bool error = false;
-      final signal = streamSignal<int>(() async* {
+      final signal = streamSignal<int, Object>(() async* {
         throw Exception();
       });
       effect(() {

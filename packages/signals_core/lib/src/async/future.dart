@@ -20,7 +20,7 @@ import 'stream.dart';
 ///
 /// ## .value, .peek()
 ///
-/// Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
+/// Returns [`AsyncState<T, E>`](/dart/async/state) for the value and can handle the various states.
 ///
 /// The `value` getter returns the value of the future if it completed successfully.
 ///
@@ -87,7 +87,7 @@ import 'stream.dart';
 /// ```
 /// @link https://dartsignals.dev/async/future
 /// {@endtemplate}
-class FutureSignal<T> extends StreamSignal<T> {
+class FutureSignal<T, E> extends StreamSignal<T, E> {
   /// {@template future}
   /// Future signals can be created by extension or method.
   ///
@@ -105,7 +105,7 @@ class FutureSignal<T> extends StreamSignal<T> {
   ///
   /// ## .value, .peek()
   ///
-  /// Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
+  /// Returns [`AsyncState<T, E>`](/dart/async/state) for the value and can handle the various states.
   ///
   /// The `value` getter returns the value of the future if it completed successfully.
   ///
@@ -182,12 +182,6 @@ class FutureSignal<T> extends StreamSignal<T> {
   }) : super(() => fn().asStream(), cancelOnError: true);
 
   @override
-  Future<void> refresh() async {
-    await super.refresh();
-    await future;
-  }
-
-  @override
   Future<void> reload() async {
     await super.reload();
     await future;
@@ -211,7 +205,7 @@ class FutureSignal<T> extends StreamSignal<T> {
 ///
 /// ## .value, .peek()
 ///
-/// Returns [`AsyncState<T>`](/dart/async/state) for the value and can handle the various states.
+/// Returns [`AsyncState<T, E>`](/dart/async/state) for the value and can handle the various states.
 ///
 /// The `value` getter returns the value of the future if it completed successfully.
 ///
@@ -278,7 +272,7 @@ class FutureSignal<T> extends StreamSignal<T> {
 /// ```
 /// @link https://dartsignals.dev/async/future
 /// {@endtemplate}
-FutureSignal<T> futureSignal<T>(
+FutureSignal<T, E> futureSignal<T, E>(
   Future<T> Function() fn, {
   T? initialValue,
   String? debugLabel,

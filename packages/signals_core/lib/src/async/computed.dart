@@ -14,7 +14,7 @@ import 'future.dart';
 /// ```
 ///
 /// Since all dependencies are passed in as arguments there is no need to worry about calling the signals before any async gaps with await.
-FutureSignal<T> computedFrom<T, A>(
+FutureSignal<T, E> computedFrom<T, A, E>(
   List<ReadonlySignal<A>> signals,
   Future<T> Function(List<A> args) fn, {
   T? initialValue,
@@ -22,7 +22,7 @@ FutureSignal<T> computedFrom<T, A>(
   bool autoDispose = false,
   bool lazy = true,
 }) {
-  return FutureSignal<T>(
+  return FutureSignal<T, E>(
     () => fn(signals.map((e) => e()).toList()),
     dependencies: signals,
     initialValue: initialValue,
@@ -47,7 +47,7 @@ FutureSignal<T> computedFrom<T, A>(
 /// **It is important that signals are called before any async gaps with await.**
 ///
 /// Any signal that is read inside the callback will be tracked as a dependency and the computed signal will be re-evaluated when any of the dependencies change.
-FutureSignal<T> computedAsync<T>(
+FutureSignal<T, E> computedAsync<T, E>(
   Future<T> Function() fn, {
   T? initialValue,
   String? debugLabel,
@@ -55,7 +55,7 @@ FutureSignal<T> computedAsync<T>(
   List<ReadonlySignal<dynamic>> dependencies = const [],
   bool lazy = true,
 }) {
-  return FutureSignal<T>(
+  return FutureSignal<T, E>(
     fn,
     dependencies: dependencies,
     initialValue: initialValue,

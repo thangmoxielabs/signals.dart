@@ -109,14 +109,14 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   /// ```
   ///
   /// Since all dependencies are passed in as arguments there is no need to worry about calling the signals before any async gaps with await.
-  FutureSignal<S> createComputedFrom<S, A>(
+  FutureSignal<S, E> createComputedFrom<S, A, E>(
     List<ReadonlySignal<A>> signals,
     Future<S> Function(List<A> args) fn, {
     S? initialValue,
     String? debugLabel,
     bool lazy = true,
   }) {
-    return _bindLocal(computedFrom<S, A>(
+    return _bindLocal(computedFrom<S, A, E>(
       signals,
       fn,
       initialValue: initialValue,
@@ -140,14 +140,14 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   /// **It is important that signals are called before any async gaps with await.**
   ///
   /// Any signal that is read inside the callback will be tracked as a dependency and the computed signal will be re-evaluated when any of the dependencies change.
-  FutureSignal<S> createComputedAsync<S>(
+  FutureSignal<S, E> createComputedAsync<S, E>(
     Future<S> Function() fn, {
     S? initialValue,
     String? debugLabel,
     List<ReadonlySignal<dynamic>> dependencies = const [],
     bool lazy = true,
   }) {
-    return _bindLocal(computedAsync<S>(
+    return _bindLocal(computedAsync<S, E>(
       fn,
       dependencies: dependencies,
       initialValue: initialValue,
@@ -157,14 +157,14 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Create a signal from a future
-  FutureSignal<S> createFutureSignal<S>(
+  FutureSignal<S, E> createFutureSignal<S, E>(
     Future<S> Function() fn, {
     S? initialValue,
     String? debugLabel,
     List<ReadonlySignal<dynamic>> dependencies = const [],
     bool lazy = true,
   }) {
-    return _bindLocal(futureSignal<S>(
+    return _bindLocal(futureSignal<S, E>(
       fn,
       initialValue: initialValue,
       debugLabel: debugLabel,
@@ -174,7 +174,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Create a signals from a stream
-  StreamSignal<S> createStreamSignal<S>(
+  StreamSignal<S, E> createStreamSignal<S, E>(
     Stream<S> Function() callback, {
     S? initialValue,
     String? debugLabel,
@@ -183,7 +183,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     bool? cancelOnError,
     bool lazy = true,
   }) {
-    return _bindLocal(streamSignal<S>(
+    return _bindLocal(streamSignal<S, E>(
       callback,
       initialValue: initialValue,
       debugLabel: debugLabel,
@@ -195,11 +195,11 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Create a signal holding an async value
-  AsyncSignal<S> createAsyncSignal<S>(
-    AsyncState<S> value, {
+  AsyncSignal<S, E> createAsyncSignal<S, E>(
+    AsyncState<S, E> value, {
     String? debugLabel,
   }) {
-    return _bindLocal(asyncSignal<S>(
+    return _bindLocal(asyncSignal<S, E>(
       value,
       debugLabel: debugLabel,
     ));

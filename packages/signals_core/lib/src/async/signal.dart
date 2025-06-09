@@ -177,10 +177,10 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
   Completer<bool> _completer = Completer<bool>();
 
   /// The future of the signal completer
-  Future<T> get future async {
+  Future<T?> get future async {
     value;
     await _completer.future;
-    return value.requireValue;
+    return value.value;
   }
 
   /// Returns true if the signal is completed an error or data
@@ -201,7 +201,7 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
   /// Set the value to [AsyncData]
   void setValue(T value) {
     batch(() {
-      set(this.value.withValue(value), force: true);
+      set(super.value.withValue(value), force: true);
       if (_completer.isCompleted) _completer = Completer<bool>();
       _completer.complete(true);
     });
@@ -210,7 +210,7 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
   /// Set the loading state to [AsyncLoading]
   void setLoading() {
     batch(() {
-      value = this.value.withLoading();
+      value = super.value.withLoading();
       _completer = Completer<bool>();
     });
   }
@@ -232,7 +232,7 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
 
   /// Reload the future
   Future<void> reload() async {
-    value = this.value.withReloading();
+    value = super.value.withReloading();
   }
 
   @override

@@ -217,7 +217,7 @@ class AsyncState<T, E> {
         isReloading: false,
       );
 
-  AsyncState<T, E> withError(E error, [StackTrace? stackTrace]) {
+  AsyncState<T, E> withError(E? error, [StackTrace? stackTrace]) {
     return AsyncState(
       error: error,
       stackTrace: stackTrace,
@@ -227,7 +227,7 @@ class AsyncState<T, E> {
     );
   }
 
-  AsyncState<T, E> withValue(T? value) {
+  AsyncState<T, E> withValue(T value) {
     return AsyncState(
       error: null,
       stackTrace: null,

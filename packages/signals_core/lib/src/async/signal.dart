@@ -198,6 +198,15 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
     });
   }
 
+  /// Clear the error
+  void clearError() {
+    batch(() {
+      value = value.withError(null);
+      if (_completer.isCompleted) _completer = Completer<bool>();
+      _completer.complete(true);
+    });
+  }
+
   /// Set the value to [AsyncData]
   void setValue(T value) {
     batch(() {

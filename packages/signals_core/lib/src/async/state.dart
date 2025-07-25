@@ -3,15 +3,15 @@
 /// The `Function` below stands for one of two types:
 /// - (dynamic) -> FutureOr
 /// - (dynamic, StackTrace) -> FutureOr
-typedef AsyncErrorBuilder<E> = Function;
+typedef AsyncErrorBuilder<V, E> = V Function(E error, StackTrace? stackTrace);
 
 /// Value builder for [AsyncState]
-typedef AsyncDataBuilder<E, T> = E Function(
+typedef AsyncDataBuilder<V, T> = V Function(
   T value,
 );
 
 /// Generic builder for [AsyncState]
-typedef AsyncStateBuilder<E> = E Function();
+typedef AsyncStateBuilder<V> = V Function();
 
 /// {@template state}
 /// `AsyncState` is class commonly used with Future/Stream signals to represent the states the signal can be in.
@@ -271,23 +271,20 @@ class AsyncState<T, E> {
   /// The error `Function` below can be one of two types:
   /// - (dynamic) -> FutureOr
   /// - (dynamic, StackTrace) -> FutureOr
-  E map<E>({
-    required AsyncDataBuilder<E, T> data,
-    required AsyncErrorBuilder<E> error,
-    required AsyncStateBuilder<E> loading,
-    AsyncStateBuilder<E>? reloading,
-    AsyncStateBuilder<E>? refreshing,
+  V map<V>({
+    required AsyncDataBuilder<V, T> data,
+    required AsyncErrorBuilder<V, E> error,
+    required AsyncStateBuilder<V> loading,
+    AsyncStateBuilder<V>? reloading,
+    AsyncStateBuilder<V>? refreshing,
   }) {
     if (isReloading) if (reloading != null) return reloading();
     if (hasValue) return data(value as T);
     if (hasError) {
-      if (error is Function(dynamic, dynamic)) {
-        return error(this.error, stackTrace);
-      } else if (error is Function(dynamic)) {
-        return error(this.error);
-      } else {
-        return error();
-      }
+      return error(
+        this.error as E,
+        stackTrace,
+      );
     }
     return loading();
   }
@@ -305,25 +302,22 @@ class AsyncState<T, E> {
   /// The error `Function` below can be one of two types:
   /// - (dynamic) -> FutureOr
   /// - (dynamic, StackTrace) -> FutureOr
-  E maybeMap<E>({
-    AsyncDataBuilder<E, T>? data,
-    AsyncErrorBuilder<E>? error,
-    AsyncStateBuilder<E>? loading,
-    AsyncStateBuilder<E>? reloading,
-    AsyncStateBuilder<E>? refreshing,
-    required AsyncStateBuilder<E> orElse,
+  V maybeMap<V>({
+    AsyncDataBuilder<V, T>? data,
+    AsyncErrorBuilder<V, E>? error,
+    AsyncStateBuilder<V>? loading,
+    AsyncStateBuilder<V>? reloading,
+    AsyncStateBuilder<V>? refreshing,
+    required AsyncStateBuilder<V> orElse,
   }) {
     if (isReloading) if (reloading != null) return reloading();
     if (hasValue) if (data != null) return data(value as T);
     if (hasError) {
       if (error != null) {
-        if (error is Function(Object, StackTrace?)) {
-          return error(this.error as Object, stackTrace);
-        } else if (error is Function(Object)) {
-          return error(this.error as Object);
-        } else {
-          return error();
-        }
+        return error(
+          this.error as E,
+          stackTrace,
+        );
       }
     }
     if (isLoading) if (loading != null) return loading();

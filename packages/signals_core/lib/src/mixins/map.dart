@@ -11,19 +11,19 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
   @override
   void operator []=(K key, V value) {
     this.value[key] = value;
-    set(this.value, force: true);
+    set(this.value);
   }
 
   @override
   void addAll(Map<K, V> other) {
     value.addAll(other);
-    set(value, force: true);
+    set(value);
   }
 
   @override
   void addEntries(Iterable<MapEntry<K, V>> newEntries) {
     value.addEntries(newEntries);
-    set(value, force: true);
+    set(value);
   }
 
   @override
@@ -34,7 +34,7 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
   @override
   void clear() {
     value.clear();
-    set(value, force: true);
+    set(value);
   }
 
   @override
@@ -53,7 +53,7 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
   @override
   void forEach(void Function(K key, V value) action) {
     value.forEach(action);
-    set(value, force: true);
+    set(value);
   }
 
   @override
@@ -76,34 +76,34 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
   @override
   V putIfAbsent(K key, V Function() ifAbsent) {
     final result = value.putIfAbsent(key, ifAbsent);
-    set(value, force: true);
+    set(value);
     return result;
   }
 
   @override
   V? remove(Object? key) {
     final result = value.remove(key);
-    set(value, force: true);
+    set(value);
     return result;
   }
 
   @override
   void removeWhere(bool Function(K key, V value) test) {
     value.removeWhere(test);
-    set(value, force: true);
+    set(value);
   }
 
   @override
   V update(K key, V Function(V value) update, {V Function()? ifAbsent}) {
     final result = value.update(key, update, ifAbsent: ifAbsent);
-    set(value, force: true);
+    set(value);
     return result;
   }
 
   @override
   void updateAll(V Function(K key, V value) update) {
     value.updateAll(update);
-    set(value, force: true);
+    set(value);
   }
 
   @override

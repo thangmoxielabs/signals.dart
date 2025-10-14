@@ -11,19 +11,19 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
   @override
   void operator []=(K key, V value) {
     this.value[key] = value;
-    set(this.value);
+    set(this.value, force: true);
   }
 
   @override
   void addAll(Map<K, V> other) {
     value.addAll(other);
-    set(value);
+    set(value, force: true);
   }
 
   @override
   void addEntries(Iterable<MapEntry<K, V>> newEntries) {
     value.addEntries(newEntries);
-    set(value);
+    set(value, force: true);
   }
 
   @override
@@ -34,7 +34,7 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
   @override
   void clear() {
     value.clear();
-    set(value);
+    set(value, force: true);
   }
 
   @override
@@ -53,7 +53,7 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
   @override
   void forEach(void Function(K key, V value) action) {
     value.forEach(action);
-    set(value);
+    set(value, force: true);
   }
 
   @override
@@ -76,6 +76,7 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
   @override
   V putIfAbsent(K key, V Function() ifAbsent) {
     final result = value.putIfAbsent(key, ifAbsent);
+    // Don't force update for putIfAbsent, as it may trigger cycle updates
     set(value);
     return result;
   }
@@ -83,27 +84,27 @@ mixin MapSignalMixin<K, V, T extends Map<K, V>> on Signal<T>
   @override
   V? remove(Object? key) {
     final result = value.remove(key);
-    set(value);
+    set(value, force: true);
     return result;
   }
 
   @override
   void removeWhere(bool Function(K key, V value) test) {
     value.removeWhere(test);
-    set(value);
+    set(value, force: true);
   }
 
   @override
   V update(K key, V Function(V value) update, {V Function()? ifAbsent}) {
     final result = value.update(key, update, ifAbsent: ifAbsent);
-    set(value);
+    set(value, force: true);
     return result;
   }
 
   @override
   void updateAll(V Function(K key, V value) update) {
     value.updateAll(update);
-    set(value);
+    set(value, force: true);
   }
 
   @override

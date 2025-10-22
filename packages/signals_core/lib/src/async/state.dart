@@ -341,4 +341,25 @@ class AsyncState<T, E> {
         error.hashCode ^
         stackTrace.hashCode;
   }
+
+  @override
+  String toString() {
+    if (isReloading) {
+      if (hasValue) {
+        return 'AsyncState.dataReloading(value: $value)';
+      } else if (hasError) {
+        return 'AsyncState.errorReloading(error: $error, stackTrace: $stackTrace)';
+      } else {
+        return 'AsyncState.reloading()';
+      }
+    } else if (isLoading) {
+      return 'AsyncState.loading()';
+    } else if (hasValue) {
+      return 'AsyncState.data(value: $value)';
+    } else if (hasError) {
+      return 'AsyncState.error(error: $error, stackTrace: $stackTrace)';
+    } else {
+      return 'AsyncState.unknown()';
+    }
+  }
 }

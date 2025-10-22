@@ -325,8 +325,20 @@ class AsyncState<T, E> {
   }
 
   @override
-  bool operator ==(covariant AsyncState<T, E> other);
+  bool operator ==(covariant AsyncState<T, E> other) {
+    return other.error == error &&
+        other.stackTrace == stackTrace &&
+        other.value == value &&
+        other.isLoading == isLoading &&
+        other.isReloading == isReloading;
+  }
 
   @override
-  int get hashCode;
+  int get hashCode {
+    return value.hashCode ^
+        isLoading.hashCode ^
+        isReloading.hashCode ^
+        error.hashCode ^
+        stackTrace.hashCode;
+  }
 }

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
+
 import '../core/signals.dart';
 import '../mixins/event_sink.dart';
 import 'state.dart';
@@ -174,27 +176,30 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
   }) : _initialValue = value;
   final AsyncState<T, E> _initialValue;
   bool _initialized = false;
-  Completer<bool> _completer = Completer<bool>();
+
+  /// Internal Completer for values
+  @internal
+  Completer<bool> completer = Completer<bool>();
 
   /// The future of the signal completer
   Future<T?> get future async {
     value;
-    await _completer.future;
+    await completer.future;
     return value.value;
   }
 
   /// Returns true if the signal is completed an error or data
   bool get isCompleted {
     value;
-    return _completer.isCompleted;
+    return completer.isCompleted;
   }
 
   /// Set the error with optional stackTrace to [AsyncError]
   void setError(E error, [StackTrace? stackTrace]) {
     batch(() {
       value = value.withError(error, stackTrace);
-      if (_completer.isCompleted) _completer = Completer<bool>();
-      _completer.complete(true);
+      if (completer.isCompleted) completer = Completer<bool>();
+      completer.complete(true);
     });
   }
 
@@ -202,8 +207,8 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
   void clearError() {
     batch(() {
       value = value.withError(null);
-      if (_completer.isCompleted) _completer = Completer<bool>();
-      _completer.complete(true);
+      if (completer.isCompleted) completer = Completer<bool>();
+      completer.complete(true);
     });
   }
 
@@ -211,8 +216,8 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
   void setValue(T value) {
     batch(() {
       set(super.value.withValue(value), force: true);
-      if (_completer.isCompleted) _completer = Completer<bool>();
-      _completer.complete(true);
+      if (completer.isCompleted) completer = Completer<bool>();
+      completer.complete(true);
     });
   }
 
@@ -220,7 +225,7 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
   void setLoading() {
     batch(() {
       value = super.value.withLoading();
-      _completer = Completer<bool>();
+      completer = Completer<bool>();
     });
   }
 
@@ -229,7 +234,7 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
     batch(() {
       value = _initialValue;
       _initialized = false;
-      if (_completer.isCompleted) _completer = Completer<bool>();
+      if (completer.isCompleted) completer = Completer<bool>();
     });
   }
 

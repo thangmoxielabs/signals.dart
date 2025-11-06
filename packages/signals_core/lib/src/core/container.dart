@@ -76,7 +76,11 @@ class SignalContainer<T, Arg, S extends ReadonlySignalMixin> {
   S call(Arg arg) {
     if (cache) {
       return store.putIfAbsent(arg, () {
-        return _create(arg)..onDispose(() => store.remove(arg));
+        final t = _create(arg);
+        if (t is SignalsAutoDisposeMixin) {
+          (t as SignalsAutoDisposeMixin).onDispose(() => store.remove(arg));
+        }
+        return t;
       });
     } else {
       return _create(arg);
@@ -94,7 +98,8 @@ class SignalContainer<T, Arg, S extends ReadonlySignalMixin> {
 
   /// Dispose of all created signals
   void dispose() {
-    for (final signal in store.values.toList()) {
+    for (final signal
+        in store.values.whereType<SignalsAutoDisposeMixin>().toList()) {
       signal.dispose();
     }
     store.dispose();

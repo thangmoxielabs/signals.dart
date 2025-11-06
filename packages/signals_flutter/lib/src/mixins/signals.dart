@@ -121,7 +121,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       initialValue: initialValue,
       debugLabel: debugLabel,
       lazy: lazy,
-    ));
+    ),);
   }
 
   /// Async Computed is syntax sugar around [FutureSignal].
@@ -152,7 +152,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       initialValue: initialValue,
       debugLabel: debugLabel,
       lazy: lazy,
-    ));
+    ),);
   }
 
   /// Create a signal from a future
@@ -169,7 +169,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       debugLabel: debugLabel,
       dependencies: dependencies,
       lazy: lazy,
-    ));
+    ),);
   }
 
   /// Create a signals from a stream
@@ -190,7 +190,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
       onDone: onDone,
       cancelOnError: cancelOnError,
       lazy: lazy,
-    ));
+    ),);
   }
 
   /// Create a signal holding an async value
@@ -201,7 +201,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(asyncSignal<S, E>(
       value,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a signal<T> and watch for changes
@@ -212,7 +212,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(signal<V>(
       val,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a [ListSignal]<T> and watch for changes
@@ -223,7 +223,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(ListSignal<V>(
       list,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a [SetSignal]<T> and watch for changes
@@ -234,7 +234,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(SetSignal<V>(
       set,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a [QueueSignal]<T> and watch for changes
@@ -245,7 +245,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(QueueSignal<V>(
       queue,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a [MapSignal]<T> and watch for changes
@@ -256,7 +256,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(MapSignal<K, V>(
       value,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   /// Create a computed<T> and watch for changes
@@ -267,7 +267,7 @@ mixin SignalsMixin<T extends StatefulWidget> on State<T> {
     return _bindLocal(computed<V>(
       cb,
       debugLabel: debugLabel,
-    ));
+    ),);
   }
 
   S _bindLocal<V, S extends ReadonlySignal<V>>(S val) {

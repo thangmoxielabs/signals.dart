@@ -211,7 +211,7 @@ class AsyncState<T, E> {
       );
   factory AsyncState.error(E error, [StackTrace? stackTrace]) => AsyncState(
         error: error,
-        stackTrace: stackTrace,
+        stackTrace: stackTrace ?? StackTrace.current,
         value: null,
         isLoading: false,
         isReloading: false,
@@ -220,7 +220,7 @@ class AsyncState<T, E> {
   AsyncState<T, E> withError(E? error, [StackTrace? stackTrace]) {
     return AsyncState(
       error: error,
-      stackTrace: stackTrace,
+      stackTrace: stackTrace ?? StackTrace.current,
       value: value,
       isLoading: false,
       isReloading: false,
@@ -252,7 +252,7 @@ class AsyncState<T, E> {
       error: error,
       stackTrace: stackTrace,
       value: value,
-      isLoading: false,
+      isLoading: true,
       isReloading: true,
     );
   }

@@ -261,7 +261,9 @@ class StreamSignal<T, E> extends AsyncSignal<T, E> {
             return fn();
           },
         ),
-        super(AsyncState(value: initialValue)) {
+        super(initialValue != null
+            ? AsyncState.data(initialValue)
+            : AsyncState.loading()) {
     if (!lazy) value;
   }
 

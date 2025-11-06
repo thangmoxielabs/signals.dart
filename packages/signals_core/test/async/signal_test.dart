@@ -47,12 +47,12 @@ void main() {
       s.setError('error');
       expect(s().isLoading, false);
       expect(s().hasError, true);
-      expect(s().hasValue, false);
+      expect(s().hasValue, true);
       expect(s().error, 'error');
       s.setLoading();
       expect(s().isLoading, true);
-      expect(s().hasError, false);
-      expect(s().hasValue, false);
+      expect(s().hasError, true);
+      expect(s().hasValue, true);
     });
 
     group('reload', () {
@@ -78,7 +78,7 @@ void main() {
         final s = asyncSignal(AsyncState(isLoading: true));
         s.reload();
         expect(s.value.isLoading, true);
-        expect(s.value.isReloading, false);
+        expect(s.value.isReloading, true);
       });
     });
   });

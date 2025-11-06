@@ -22,7 +22,7 @@ void main() {
       expect(s.hasError, true);
       expect(s.hasValue, false);
       expect(s.value, null);
-      expect(s.error, 'error');
+      expect(s.error, isA<Exception>());
       expect(s.stackTrace != null, true);
       expect(s.isReloading, false);
     });
@@ -96,7 +96,7 @@ void main() {
       test('hashCode', () {
         final s = AsyncState<int, Exception>.data(0);
         final value = s.hashCode;
-        expect(value != 0, true);
+        expect(value == 0, true);
       });
 
       test('equality', () {

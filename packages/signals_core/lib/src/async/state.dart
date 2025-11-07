@@ -194,7 +194,7 @@ class AsyncState<T, E> {
   bool get hasValue => value != null;
   T get requireValue => value!;
 
-  factory AsyncState.loading() => AsyncState(
+  factory AsyncState.loading() => const AsyncState(
         error: null,
         stackTrace: null,
         value: null,

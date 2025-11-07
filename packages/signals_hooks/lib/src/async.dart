@@ -20,7 +20,7 @@ import 'core.dart';
 ///   }
 /// }
 /// ```
-FutureSignal<T> useFutureSignal<T>(
+FutureSignal<T, E> useFutureSignal<T, E>(
   Future<T> Function() value, {
   /// A list of objects to watch for changes.
   ///
@@ -40,15 +40,18 @@ FutureSignal<T> useFutureSignal<T>(
   /// The debug label for the signal.
   String? debugLabel,
 }) {
-  final s = useMemoized(() {
-    return futureSignal(
-      value,
-      initialValue: initialValue,
-      dependencies: dependencies,
-      lazy: lazy,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized(
+    () {
+      return futureSignal<T, E>(
+        value,
+        initialValue: initialValue,
+        dependencies: dependencies,
+        lazy: lazy,
+        debugLabel: debugLabel,
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -69,7 +72,7 @@ FutureSignal<T> useFutureSignal<T>(
 ///   }
 /// }
 /// ```
-StreamSignal<T> useStreamSignal<T>(
+StreamSignal<T, E> useStreamSignal<T, E>(
   Stream<T> Function() value, {
   /// A list of objects to watch for changes.
   ///
@@ -95,17 +98,20 @@ StreamSignal<T> useStreamSignal<T>(
   /// The debug label for the signal.
   String? debugLabel,
 }) {
-  final s = useMemoized(() {
-    return streamSignal(
-      value,
-      onDone: onDone,
-      initialValue: initialValue,
-      cancelOnError: cancelOnError,
-      lazy: lazy,
-      dependencies: dependencies,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized(
+    () {
+      return streamSignal<T, E>(
+        value,
+        onDone: onDone,
+        initialValue: initialValue,
+        cancelOnError: cancelOnError,
+        lazy: lazy,
+        dependencies: dependencies,
+        debugLabel: debugLabel,
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }
 
@@ -126,8 +132,8 @@ StreamSignal<T> useStreamSignal<T>(
 ///   }
 /// }
 /// ```
-AsyncSignal<T> useAsyncSignal<T>(
-  AsyncState<T> value, {
+AsyncSignal<T, E> useAsyncSignal<T, E>(
+  AsyncState<T, E> value, {
   /// A list of objects to watch for changes.
   ///
   /// If any of the keys change, the signal will be re-created with the
@@ -162,7 +168,7 @@ AsyncSignal<T> useAsyncSignal<T>(
 ///   }
 /// }
 /// ```
-FutureSignal<T> useAsyncComputed<T>(
+FutureSignal<T, E> useAsyncComputed<T, E>(
   Future<T> Function() value, {
   /// A list of objects to watch for changes.
   ///
@@ -182,14 +188,17 @@ FutureSignal<T> useAsyncComputed<T>(
   /// The debug label for the signal.
   String? debugLabel,
 }) {
-  final s = useMemoized(() {
-    return computedAsync(
-      value,
-      dependencies: dependencies,
-      lazy: lazy,
-      initialValue: initialValue,
-      debugLabel: debugLabel,
-    );
-  }, keys,);
+  final s = useMemoized(
+    () {
+      return computedAsync<T, E>(
+        value,
+        dependencies: dependencies,
+        lazy: lazy,
+        initialValue: initialValue,
+        debugLabel: debugLabel,
+      );
+    },
+    keys,
+  );
   return useExistingSignal(s, keys: keys);
 }

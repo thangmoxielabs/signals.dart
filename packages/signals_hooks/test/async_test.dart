@@ -7,15 +7,17 @@ void main() {
   group('Async Signals Tests', () {
     group('useFutureSignal', () {
       testWidgets('compelete with value', (tester) async {
-        FutureSignal<int>? state;
+        FutureSignal<int, Exception>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useFutureSignal(
-              () => Future.delayed(const Duration(seconds: 1), () => 1),
-              lazy: false,
-            );
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useFutureSignal(
+                () => Future.delayed(const Duration(seconds: 1), () => 1),
+                lazy: false,
+              );
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(state!.value.isLoading, true);
@@ -27,16 +29,18 @@ void main() {
 
     group('useStreamSignal', () {
       testWidgets('emit value', (tester) async {
-        StreamSignal<int>? state;
+        StreamSignal<int, Exception>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useStreamSignal(
-              () =>
-                  Stream.periodic(const Duration(seconds: 1), (i) => i).take(1),
-              lazy: false,
-            );
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useStreamSignal(
+                () => Stream.periodic(const Duration(seconds: 1), (i) => i)
+                    .take(1),
+                lazy: false,
+              );
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(state!.value.isLoading, true);
@@ -48,27 +52,31 @@ void main() {
 
     group('useAsyncSignal', () {
       testWidgets('initial value', (tester) async {
-        AsyncSignal<int>? state;
+        AsyncSignal<int, Exception>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useAsyncSignal<int>(const AsyncLoading());
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useAsyncSignal<int, Exception>(AsyncState.loading());
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(state!.value.isLoading, true);
       });
 
       testWidgets('set value', (tester) async {
-        AsyncSignal<int>? state;
+        AsyncSignal<int, Exception>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useAsyncSignal<int>(const AsyncLoading());
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useAsyncSignal<int, Exception>(AsyncState.loading());
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
-        state!.value = const AsyncData(1);
+        state!.value = AsyncState.data(1);
         await tester.pumpAndSettle();
 
         expect(state!.value.hasValue, true);
@@ -79,19 +87,21 @@ void main() {
     group('useAsyncComputed', () {
       testWidgets('compelete with value', (tester) async {
         final count = signal(0);
-        FutureSignal<int>? state;
+        FutureSignal<int, Exception>? state;
         await tester.pumpWidget(
-          HookBuilder(builder: (context) {
-            state ??= useAsyncComputed(
-              () => Future.delayed(
-                const Duration(seconds: 1),
-                () => count.value * 2,
-              ),
-              dependencies: [count],
-              lazy: false,
-            );
-            return Text('$state', textDirection: TextDirection.ltr);
-          },),
+          HookBuilder(
+            builder: (context) {
+              state ??= useAsyncComputed(
+                () => Future.delayed(
+                  const Duration(seconds: 1),
+                  () => count.value * 2,
+                ),
+                dependencies: [count],
+                lazy: false,
+              );
+              return Text('$state', textDirection: TextDirection.ltr);
+            },
+          ),
         );
 
         expect(state!.value.isLoading, true);

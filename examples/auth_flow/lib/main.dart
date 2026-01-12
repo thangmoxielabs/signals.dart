@@ -329,7 +329,7 @@ class ProfileScreen extends StatelessWidget {
                   const Text('Error loading settings'),
                   ElevatedButton(
                     onPressed: () {
-                      auth.settings.refresh();
+                      auth.settings.reload();
                     },
                     child: const Text('Retry'),
                   ),

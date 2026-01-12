@@ -80,6 +80,85 @@ void main() {
         expect(s.value.isLoading, true);
         expect(s.value.isReloading, true);
       });
+
+      test('await reload() waits for setValue', () async {
+        final s = asyncSignal(AsyncState(value: 0));
+
+        var reloadCompleted = false;
+        final reloadFuture = s.reload().then((_) {
+          reloadCompleted = true;
+        });
+
+        // Reload should not complete immediately
+        await Future.delayed(Duration(milliseconds: 10));
+        expect(reloadCompleted, false);
+
+        // Set new value
+        s.setValue(1);
+
+        // Now reload should complete
+        await reloadFuture;
+        expect(reloadCompleted, true);
+        expect(s.value.value, 1);
+      });
+
+      test('await reload() waits for setError', () async {
+        final s = asyncSignal(AsyncState(value: 0));
+
+        var reloadCompleted = false;
+        final reloadFuture = s.reload().then((_) {
+          reloadCompleted = true;
+        });
+
+        // Reload should not complete immediately
+        await Future.delayed(Duration(milliseconds: 10));
+        expect(reloadCompleted, false);
+
+        // Set error
+        s.setError('new error');
+
+        // Now reload should complete
+        await reloadFuture;
+        expect(reloadCompleted, true);
+        expect(s.value.error, 'new error');
+      });
+
+      test('multiple sequential await reload() calls', () async {
+        final s = asyncSignal(AsyncState(value: 0));
+
+        // First reload
+        final reload1Future = s.reload();
+        s.setValue(1);
+        await reload1Future;
+        expect(s.value.value, 1);
+
+        // Second reload
+        final reload2Future = s.reload();
+        s.setValue(2);
+        await reload2Future;
+        expect(s.value.value, 2);
+      });
+
+      test('await reload() with clearError', () async {
+        final s = asyncSignal(AsyncState(error: 'error'));
+
+        var reloadCompleted = false;
+        final reloadFuture = s.reload().then((_) {
+          reloadCompleted = true;
+        });
+
+        // Reload should not complete immediately
+        await Future.delayed(Duration(milliseconds: 10));
+        expect(reloadCompleted, false);
+
+        // Clear error
+        s.clearError();
+
+        // Now reload should complete
+        await reloadFuture;
+        expect(reloadCompleted, true);
+        expect(s.value.hasError, false);
+      });
     });
   });
 }

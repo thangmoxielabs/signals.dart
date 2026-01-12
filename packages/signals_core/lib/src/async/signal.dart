@@ -224,7 +224,7 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
   /// Set the loading state to [AsyncLoading]
   void setLoading() {
     batch(() {
-      value = this.value.withLoading();
+      value = value.withLoading();
       completer = Completer<bool>();
     });
   }
@@ -246,7 +246,11 @@ class AsyncSignal<T, E> extends Signal<AsyncState<T, E>>
 
   /// Reload the future
   Future<void> reload() async {
-    value = this.value.withReloading();
+    batch(() {
+      value = value.withReloading();
+      completer = Completer<bool>();
+    });
+    await completer.future;
   }
 
   @override

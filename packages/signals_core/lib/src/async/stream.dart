@@ -319,6 +319,7 @@ class StreamSignal<T, E> extends AsyncSignal<T, E> {
     await execute(_stream.value);
   }
 
+  @Deprecated('Use reload() instead')
   @override
   void reset() {
     super.reset();

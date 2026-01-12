@@ -194,7 +194,7 @@ class AsyncState<T, E> {
   bool get hasValue => value != null;
   T get requireValue => value!;
 
-  factory AsyncState.loading() => const AsyncState(
+  factory AsyncState.loading() => AsyncState<T, E>(
         error: null,
         stackTrace: null,
         value: null,
@@ -202,14 +202,15 @@ class AsyncState<T, E> {
         isReloading: false,
       );
 
-  factory AsyncState.data(T value) => AsyncState(
+  factory AsyncState.data(T value) => AsyncState<T, E>(
         error: null,
         stackTrace: null,
         value: value,
         isLoading: false,
         isReloading: false,
       );
-  factory AsyncState.error(E error, [StackTrace? stackTrace]) => AsyncState(
+  factory AsyncState.error(E error, [StackTrace? stackTrace]) =>
+      AsyncState<T, E>(
         error: error,
         stackTrace: stackTrace ?? StackTrace.current,
         value: null,
@@ -218,7 +219,7 @@ class AsyncState<T, E> {
       );
 
   AsyncState<T, E> withError(E? error, [StackTrace? stackTrace]) {
-    return AsyncState(
+    return AsyncState<T, E>(
       error: error,
       stackTrace: stackTrace ?? StackTrace.current,
       value: value,
@@ -228,7 +229,7 @@ class AsyncState<T, E> {
   }
 
   AsyncState<T, E> withValue(T value) {
-    return AsyncState(
+    return AsyncState<T, E>(
       error: null,
       stackTrace: null,
       value: value,
@@ -238,7 +239,7 @@ class AsyncState<T, E> {
   }
 
   AsyncState<T, E> withLoading() {
-    return AsyncState(
+    return AsyncState<T, E>(
       error: error,
       stackTrace: stackTrace,
       value: value,
@@ -248,7 +249,7 @@ class AsyncState<T, E> {
   }
 
   AsyncState<T, E> withReloading() {
-    return AsyncState(
+    return AsyncState<T, E>(
       error: error,
       stackTrace: stackTrace,
       value: value,

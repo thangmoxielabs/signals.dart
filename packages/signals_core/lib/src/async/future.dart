@@ -280,7 +280,7 @@ FutureSignal<T, E> futureSignal<T, E>(
   bool lazy = true,
   bool autoDispose = false,
 }) {
-  return FutureSignal(
+  return FutureSignal<T, E>(
     fn,
     initialValue: initialValue,
     debugLabel: debugLabel,
